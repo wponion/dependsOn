@@ -1,5 +1,4 @@
 # dependsOn
-[![Support](https://supporterhq.com/api/b/43xsfofk4c2xlijz6mvrx5yga/dependsOn)](https://supporterhq.com/support/43xsfofk4c2xlijz6mvrx5yga/dependsOn)
 
 A jQuery plugin to facilitate the handling of form field dependencies.
 
@@ -7,28 +6,23 @@ $( subject ).dependsOn( dependencySet, [options] );
 
 ## Examples
 
-[Demo](http://dstreet.github.com/dependsOn)
+[Demo](http://wponion.github.com/dependsOn)
 
 ## Installation
 
 ### with npm
 
 ```
-npm install --save jquery-depends-on
-```
-
-### with Bower
-```
-bower install --save jquery-depends-on
+npm install --save @wponion/jquery-depends-on
 ```
 
 ### Download directly
 
-[Latest Release](https://github.com/dstreet/dependsOn/releases/latest)
+[Latest Release](https://github.com/wponion/dependsOn/releases/latest)
 
 ### Build from source
 ```
-git clone https://github.com/dstreet/dependsOn.git
+git clone https://github.com/wponion/dependsOn.git
 cd dependsOn
 npm install
 gulp
@@ -111,3 +105,4 @@ When the `onEnable` and `onDisable` callbacks are called, `this` is set to the l
 ## Other Libraries
 
 * [rails_depends_on](https://github.com/francescob/rails_depends_on) - Rails Gem for dependsOn
+* [depends_on](https://github.com/dstreet/dependsOn) - jQuery for dependsOn

@@ -1,41 +1,41 @@
 {
-  "name": "jquery-depends-on",
-  "version": "1.5.1",
-  "description": "A jQuery plugin to facilitate the handling of form field dependencies.",
-  "main": "src/dependsOn.js",
-  "directories": {
-    "doc": "docs"
+  "name"            : "wponion/jquery-dependOn",
+  "version"         : "2.0.0",
+  "description"     : "A jQuery plugin to facilitate the handling of form field dependencies.",
+  "main"            : "src/dependsOn.js",
+  "directories"     : {
+	"doc" : "docs"
   },
-  "scripts": {
-    "test": "jest",
-    "build": "gulp",
-    "release": "gulp release"
+  "scripts"         : {
+	"test"    : "jest",
+	"build"   : "gulp",
+	"release" : "gulp release"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://dstreet@github.com/dstreet/dependsOn.git"
+  "repository"      : {
+	"type" : "git",
+	"url"  : "https://wponion@github.com/wponion/dependsOn.git"
   },
-  "author": "David Street",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dstreet/dependsOn/issues"
+  "author"          : "Varun Sridharan",
+  "license"         : "MIT",
+  "bugs"            : {
+	"url" : "https://github.com/wponion/dependsOn/issues"
   },
-  "homepage": "https://github.com/dstreet/dependsOn",
-  "devDependencies": {
-    "gulp": "^3.8.10",
-    "gulp-rename": "^1.2.0",
-    "gulp-replace": "^0.5.4",
-    "gulp-uglify": "^1.0.1",
-    "gulp-webpack": "^1.5.0",
-    "gulp-zip": "^3.2.0",
-    "jest": "^12.1.1",
-    "jquery": "^3.0.0"
+  "homepage"        : "https://github.com/wponion/dependsOn",
+  "devDependencies" : {
+	"gulp"         : "^3.8.10",
+	"gulp-rename"  : "^1.2.0",
+	"gulp-replace" : "^0.5.4",
+	"gulp-uglify"  : "^1.0.1",
+	"gulp-webpack" : "^1.5.0",
+	"gulp-zip"     : "^3.2.0",
+	"jest"         : "^12.1.1",
+	"jquery"       : "^3.0.0"
   },
-  "dependencies": {},
-  "jest": {
-    "setupEnvScriptFile": "test-setup.js"
+  "dependencies"    : { },
+  "jest"            : {
+	"setupEnvScriptFile" : "test-setup.js"
   },
-  "keywords": [
-    "jQuery"
+  "keywords"        : [
+	"jQuery"
   ]
 }
