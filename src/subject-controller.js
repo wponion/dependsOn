@@ -5,32 +5,32 @@
  * dependency collection state.
  */
 
-var DependencyCollection = require('./dependency-collection')
-var DependencySet        = require('./dependency-set')
+var DependencyCollection = require('./dependency-collection');
+var DependencySet        = require('./dependency-set');
 
 var SubjectController = function($subject, initialSet, options) {
-	this.$subject = $subject
-	this.collection = new DependencyCollection()
+	this.$subject = $subject;
+	this.collection = new DependencyCollection();
 	this.options = $.extend({}, {
 		onEnable: function() {},
 		onDisable: function() {},
 		trigger: 'change',
 		readonly: false
-	}, options)
-	this.collection.addSet(new DependencySet(initialSet, this.options.trigger))
+	}, options);
+	this.collection.addSet(new DependencySet(initialSet, this.options.trigger));
 
-	this.$valueTarget = this._getValueTarget()
-	this.isInitialState = true
+	this.$valueTarget = this._getValueTarget();
+	this.isInitialState = true;
 
 	if (this.collection.qualified) {
-		this._enable()
+		this._enable();
 	} else {
-		this._disable()
+		this._disable();
 	}
 
-	this.isInitialState = false
-	this.collection.on('change', this._changeHandler.bind(this))
-}
+	this.isInitialState = false;
+	this.collection.on('change', this._changeHandler.bind(this));
+};
 
 /**
  * Change handler for the collection
@@ -39,11 +39,11 @@ var SubjectController = function($subject, initialSet, options) {
  */
 SubjectController.prototype._changeHandler = function(state) {
 	if (state.qualified) {
-		this._enable(state.triggerBy.$ele, state.e)
+		this._enable(state.triggerBy.$ele, state.e);
 	} else {
-		this._disable(state.triggerBy.$ele, state.e)
+		this._disable(state.triggerBy.$ele, state.e);
 	}
-}
+};
 
 /**
  * Get the target element when setting a value
@@ -51,21 +51,21 @@ SubjectController.prototype._changeHandler = function(state) {
  * @private
  */
 SubjectController.prototype._getValueTarget = function() {
-	var $valueTarget = this.$subject
+	var $valueTarget = this.$subject;
 
 	if (this.options.hasOwnProperty('valueTarget') && typeof this.options.valueTarget !== undefined) {
-		$valueTarget = $(this.options.valueTarget)
+		$valueTarget = $(this.options.valueTarget);
 
 	// If the subject is not a form field, then look for one within the subject
 	} else if ( this.$subject[0].nodeName.toLowerCase() !== 'input' &&
 		this.$subject[0].nodeName.toLowerCase() !== 'textarea' &&
 		this.$subject[0].nodeName.toLowerCase() !== 'select') {
 
-		$valueTarget = this.$subject.find('input, textarea, select')
+		$valueTarget = this.$subject.find('input, textarea, select');
 	}
 
-	return $valueTarget
-}
+	return $valueTarget;
+};
 
 /**
  * Add a set to the dependency collection
@@ -73,23 +73,23 @@ SubjectController.prototype._getValueTarget = function() {
  * @return {SubjectController}
  */
 SubjectController.prototype.or = function(set) {
-	this.collection.addSet(new DependencySet(set, this.options.trigger))
+	this.collection.addSet(new DependencySet(set, this.options.trigger));
 
 	if (this.collection.qualified) {
-		this._enable()
+		this._enable();
 	} else {
-		this._disable()
+		this._disable();
 	}
 
-	return this
-}
+	return this;
+};
 
 /**
  * Run a check of the collection
  */
 SubjectController.prototype.check = function() {
-	this.collection.runCheck()
-}
+	this.collection.runCheck();
+};
 
 /**
  * Enable the subject
@@ -99,31 +99,31 @@ SubjectController.prototype.check = function() {
  */
 SubjectController.prototype._enable = function(dependency, e) {
 	if (this.options.disable) {
-		this.$subject.attr('disabled', false)
+		this.$subject.attr('disabled', false);
 	}
 
 	if (this.options.readonly) {
-		this.$subject.attr('readonly', false)
+		this.$subject.attr('readonly', false);
 	}
 
 	if (this.options.hide) {
-		this._toggleDisplay(true, this.isInitialState)
+		this._toggleDisplay(true, this.isInitialState);
 	}
 
 	if (this.options.hasOwnProperty('valueOnEnable') && typeof this.options.valueOnEnable !== undefined) {
-		this.$valueTarget.val(this.options.valueOnEnable).change()
+		this.$valueTarget.val(this.options.valueOnEnable).change();
 	}
 
 	if (this.options.hasOwnProperty('checkOnEnable')) {
-		this.$valueTarget.prop('checked', this.options.checkOnEnable).change()
+		this.$valueTarget.prop('checked', this.options.checkOnEnable).change();
 	}
 
 	if (this.options.hasOwnProperty('toggleClass') && typeof this.options.toggleClass !== undefined) {
-		this.$subject.addClass(this.options.toggleClass)
+		this.$subject.addClass(this.options.toggleClass);
 	}
 
-	this.options.onEnable.call(dependency, e, this.$subject)
-}
+	this.options.onEnable.call(dependency, e, this.$subject);
+};
 
 /**
  * Disable the subject
@@ -133,31 +133,31 @@ SubjectController.prototype._enable = function(dependency, e) {
  */
 SubjectController.prototype._disable = function(dependency, e) {
 	if (this.options.disable) {
-		this.$subject.attr('disabled', true)
+		this.$subject.attr('disabled', true);
 	}
 
 	if (this.options.readonly) {
-		this.$subject.attr('readonly', true)
+		this.$subject.attr('readonly', true);
 	}
 
 	if (this.options.hide) {
-		this._toggleDisplay(false, this.isInitialState)
+		this._toggleDisplay(false, this.isInitialState);
 	}
 
 	if (this.options.hasOwnProperty('valueOnDisable') && typeof this.options.valueOnDisable !== undefined) {
-		this.$valueTarget.val(this.options.valueOnDisable).change()
+		this.$valueTarget.val(this.options.valueOnDisable).change();
 	}
 
 	if (this.options.hasOwnProperty('checkOnDisable')) {
-		this.$valueTarget.prop('checked', this.options.checkOnDisable).change()
+		this.$valueTarget.prop('checked', this.options.checkOnDisable).change();
 	}
 
 	if (this.options.hasOwnProperty('toggleClass') && typeof this.options.toggleClass !== undefined) {
-		this.$subject.removeClass(this.options.toggleClass)
+		this.$subject.removeClass(this.options.toggleClass);
 	}
 
-	this.options.onDisable.call(dependency, e, this.$subject)
-}
+	this.options.onDisable.call(dependency, e, this.$subject);
+};
 
 /**
  * Show or hide the subject
@@ -166,28 +166,28 @@ SubjectController.prototype._disable = function(dependency, e) {
  * @private
  */
 SubjectController.prototype._toggleDisplay = function(show, noFade) {
-	var id = this.$subject.attr('id')
-	var $hideEle
+	var id = this.$subject.attr('id');
+	var $hideEle;
 
 	if (this.$subject.parent()[0].nodeName.toLowerCase() === 'label') {
-		$hideEle = this.$subject.parent()
+		$hideEle = this.$subject.parent();
 	} else {
-		$hideEle = this.$subject.add('label[for="' + id + '"]')
+		$hideEle = this.$subject.add('label[for="' + id + '"]');
 	}
 	
 	if (show) {
 		if (noFade) {
-			$hideEle.show()
+			$hideEle.show();
 		} else {
-			$hideEle.fadeIn(this.options.duration)
+			$hideEle.fadeIn(this.options.duration);
 		}
 	} else if (!show) {
 		if (noFade) {
-			$hideEle.hide()
+			$hideEle.hide();
 		} else {
-			$hideEle.fadeOut(this.options.duration)
+			$hideEle.fadeOut(this.options.duration);
 		}
 	}
-}
+};
 
-module.exports = SubjectController
+module.exports = SubjectController;

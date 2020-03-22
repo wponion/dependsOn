@@ -6,7 +6,7 @@
  * Licensed under the MIT license.
  */
 
-var SubjectController = require('./subject-controller')
+let SubjectController = require( './subject-controller' );
 
 /**
  * Plugin access point.
@@ -15,18 +15,15 @@ var SubjectController = require('./subject-controller')
  * @param {Object} opts An object for key-value pairs of options.
  * @return {SubjectController}
  */
-$.fn.dependsOn = function(initialSet, opts) {
-	var options = $.extend({}, {
+$.fn.WPOnion_dependsOn = function( initialSet, opts ) {
+	let options = $.extend( {}, {
 		disable: true,
 		hide: true,
 		duration: 200,
 		trigger: 'change'
-	}, opts)
+	}, opts );
 
 	// Namespace the trigger event
-	options.trigger += (options.trigger.search('.dependsOn') > -1) ? '' :  '.dependsOn'
-
-	var controller = new SubjectController(this, initialSet, options)
-
-	return controller
-}
+	options.trigger += ( options.trigger.search( '.dependsOn' ) > -1 ) ? '' : '.dependsOn';
+	return new SubjectController( this, initialSet, options );
+};
