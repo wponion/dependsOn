@@ -15,7 +15,7 @@ let SubjectController = require( './subject-controller' );
  * @param {Object} opts An object for key-value pairs of options.
  * @return {SubjectController}
  */
-$.fn.WPOnion_dependsOn = function( initialSet, opts ) {
+jQuery.fn.WPOnion_dependsOn = function( initialSet, opts ) {
 	let options = $.extend( {}, {
 		disable: true,
 		hide: true,

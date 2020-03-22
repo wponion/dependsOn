@@ -1,41 +1,30 @@
 {
-  "name"            : "@wponion/dependon",
-  "version"         : "2.0.1",
-  "description"     : "A jQuery plugin to facilitate the handling of form field dependencies.",
-  "main"            : "src/dependsOn.js",
-  "directories"     : {
-	"doc" : "docs"
-  },
-  "scripts"         : {
-	"test"    : "jest",
-	"build"   : "gulp",
-	"release" : "gulp release"
-  },
-  "repository"      : {
-	"type" : "git",
-	"url"  : "https://wponion@github.com/wponion/dependsOn.git"
-  },
-  "author"          : "Varun Sridharan",
-  "license"         : "MIT",
-  "bugs"            : {
-	"url" : "https://github.com/wponion/dependsOn/issues"
-  },
-  "homepage"        : "https://github.com/wponion/dependsOn",
-  "devDependencies" : {
-	"gulp"         : "^3.8.10",
-	"gulp-rename"  : "^1.2.0",
-	"gulp-replace" : "^0.5.4",
-	"gulp-uglify"  : "^1.0.1",
-	"gulp-webpack" : "^1.5.0",
-	"gulp-zip"     : "^3.2.0",
-	"jest"         : "^12.1.1",
-	"jquery"       : "^3.0.0"
-  },
-  "dependencies"    : { },
-  "jest"            : {
-	"setupEnvScriptFile" : "test-setup.js"
-  },
-  "keywords"        : [
-	"jQuery"
-  ]
+ "name": "@wponion/dependon",
+ "version": "2.0.1",
+ "description": "A jQuery plugin to facilitate the handling of form field dependencies.",
+ "main": "src/dependsOn.js",
+ "directories": {
+  "doc": "docs"
+ },
+ "scripts": {
+  "test": "jest",
+  "build": "gulp",
+  "release": "gulp release"
+ },
+ "repository": {
+  "type": "git",
+  "url": "https://wponion@github.com/wponion/dependsOn.git"
+ },
+ "author": "Varun Sridharan",
+ "license": "MIT",
+ "bugs": {
+  "url": "https://github.com/wponion/dependsOn/issues"
+ },
+ "homepage": "https://github.com/wponion/dependsOn",
+ "devDependencies": {
+  "easy-gulp-tasker": "*"
+ },
+ "keywords": [
+  "jQuery"
+ ]
 }
