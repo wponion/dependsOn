@@ -1,8 +1,8 @@
 /*!
- * dependsOn v${version}
+ * WPOnion dependsOn
  * a jQuery plugin to facilitate the handling of form field dependencies.
  *
- * Copyright 2016 David Street
+ * Copyright 2020 Varun Sridharan
  * Licensed under the MIT license.
  */
 
