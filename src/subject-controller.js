@@ -5,31 +5,33 @@
  * dependency collection state.
  */
 
-var DependencyCollection = require('./dependency-collection');
-var DependencySet        = require('./dependency-set');
+let DependencyCollection = require( './dependency-collection' );
+let DependencySet        = require( './dependency-set' );
 
-var SubjectController = function($subject, initialSet, options) {
-	this.$subject = $subject;
+let SubjectController = function( $subject, initialSet, options ) {
+	this.$subject   = $subject;
 	this.collection = new DependencyCollection();
-	this.options = $.extend({}, {
-		onEnable: function() {},
-		onDisable: function() {},
+	this.options    = $.extend( {}, {
+		onEnable: function() {
+		},
+		onDisable: function() {
+		},
 		trigger: 'change',
 		readonly: false
-	}, options);
-	this.collection.addSet(new DependencySet(initialSet, this.options.trigger));
+	}, options );
+	this.collection.addSet( new DependencySet( initialSet, this.options.trigger ) );
 
-	this.$valueTarget = this._getValueTarget();
+	this.$valueTarget   = this._getValueTarget();
 	this.isInitialState = true;
 
-	if (this.collection.qualified) {
+	if( this.collection.qualified ) {
 		this._enable();
 	} else {
 		this._disable();
 	}
 
 	this.isInitialState = false;
-	this.collection.on('change', this._changeHandler.bind(this));
+	this.collection.on( 'change', this._changeHandler.bind( this ) );
 };
 
 /**
@@ -37,11 +39,11 @@ var SubjectController = function($subject, initialSet, options) {
  * @param  {Object} state
  * @private
  */
-SubjectController.prototype._changeHandler = function(state) {
-	if (state.qualified) {
-		this._enable(state.triggerBy.$ele, state.e);
+SubjectController.prototype._changeHandler = function( state ) {
+	if( state.qualified ) {
+		this._enable( state.triggerBy.$ele, state.e );
 	} else {
-		this._disable(state.triggerBy.$ele, state.e);
+		this._disable( state.triggerBy.$ele, state.e );
 	}
 };
 
@@ -51,17 +53,17 @@ SubjectController.prototype._changeHandler = function(state) {
  * @private
  */
 SubjectController.prototype._getValueTarget = function() {
-	var $valueTarget = this.$subject;
+	let $valueTarget = this.$subject;
 
-	if (this.options.hasOwnProperty('valueTarget') && typeof this.options.valueTarget !== undefined) {
-		$valueTarget = $(this.options.valueTarget);
+	if( this.options.hasOwnProperty( 'valueTarget' ) && typeof this.options.valueTarget !== undefined ) {
+		$valueTarget = $( this.options.valueTarget );
 
-	// If the subject is not a form field, then look for one within the subject
-	} else if ( this.$subject[0].nodeName.toLowerCase() !== 'input' &&
-		this.$subject[0].nodeName.toLowerCase() !== 'textarea' &&
-		this.$subject[0].nodeName.toLowerCase() !== 'select') {
+		// If the subject is not a form field, then look for one within the subject
+	} else if( this.$subject[ 0 ].nodeName.toLowerCase() !== 'input' &&
+		this.$subject[ 0 ].nodeName.toLowerCase() !== 'textarea' &&
+		this.$subject[ 0 ].nodeName.toLowerCase() !== 'select' ) {
 
-		$valueTarget = this.$subject.find('input, textarea, select');
+		$valueTarget = this.$subject.find( 'input, textarea, select' );
 	}
 
 	return $valueTarget;
@@ -72,10 +74,10 @@ SubjectController.prototype._getValueTarget = function() {
  * @param  {[type]} set DependencySet
  * @return {SubjectController}
  */
-SubjectController.prototype.or = function(set) {
-	this.collection.addSet(new DependencySet(set, this.options.trigger));
+SubjectController.prototype.or = function( set ) {
+	this.collection.addSet( new DependencySet( set, this.options.trigger ) );
 
-	if (this.collection.qualified) {
+	if( this.collection.qualified ) {
 		this._enable();
 	} else {
 		this._disable();
@@ -97,32 +99,32 @@ SubjectController.prototype.check = function() {
  * @param  {Event}      e The triggering DOM event
  * @private
  */
-SubjectController.prototype._enable = function(dependency, e) {
-	if (this.options.disable) {
-		this.$subject.attr('disabled', false);
+SubjectController.prototype._enable = function( dependency, e ) {
+	if( this.options.disable ) {
+		this.$subject.attr( 'disabled', false );
 	}
 
-	if (this.options.readonly) {
-		this.$subject.attr('readonly', false);
+	if( this.options.readonly ) {
+		this.$subject.attr( 'readonly', false );
 	}
 
-	if (this.options.hide) {
-		this._toggleDisplay(true, this.isInitialState);
+	if( this.options.hide ) {
+		this._toggleDisplay( true, this.isInitialState );
 	}
 
-	if (this.options.hasOwnProperty('valueOnEnable') && typeof this.options.valueOnEnable !== undefined) {
-		this.$valueTarget.val(this.options.valueOnEnable).change();
+	if( this.options.hasOwnProperty( 'valueOnEnable' ) && typeof this.options.valueOnEnable !== undefined ) {
+		this.$valueTarget.val( this.options.valueOnEnable ).change();
 	}
 
-	if (this.options.hasOwnProperty('checkOnEnable')) {
-		this.$valueTarget.prop('checked', this.options.checkOnEnable).change();
+	if( this.options.hasOwnProperty( 'checkOnEnable' ) ) {
+		this.$valueTarget.prop( 'checked', this.options.checkOnEnable ).change();
 	}
 
-	if (this.options.hasOwnProperty('toggleClass') && typeof this.options.toggleClass !== undefined) {
-		this.$subject.addClass(this.options.toggleClass);
+	if( this.options.hasOwnProperty( 'toggleClass' ) && typeof this.options.toggleClass !== undefined ) {
+		this.$subject.addClass( this.options.toggleClass );
 	}
 
-	this.options.onEnable.call(dependency, e, this.$subject);
+	this.options.onEnable.call( dependency, e, this.$subject );
 };
 
 /**
@@ -131,32 +133,32 @@ SubjectController.prototype._enable = function(dependency, e) {
  * @param  {Event}      e The triggering DOM event
  * @private
  */
-SubjectController.prototype._disable = function(dependency, e) {
-	if (this.options.disable) {
-		this.$subject.attr('disabled', true);
+SubjectController.prototype._disable = function( dependency, e ) {
+	if( this.options.disable ) {
+		this.$subject.attr( 'disabled', true );
 	}
 
-	if (this.options.readonly) {
-		this.$subject.attr('readonly', true);
+	if( this.options.readonly ) {
+		this.$subject.attr( 'readonly', true );
 	}
 
-	if (this.options.hide) {
-		this._toggleDisplay(false, this.isInitialState);
+	if( this.options.hide ) {
+		this._toggleDisplay( false, this.isInitialState );
 	}
 
-	if (this.options.hasOwnProperty('valueOnDisable') && typeof this.options.valueOnDisable !== undefined) {
-		this.$valueTarget.val(this.options.valueOnDisable).change();
+	if( this.options.hasOwnProperty( 'valueOnDisable' ) && typeof this.options.valueOnDisable !== undefined ) {
+		this.$valueTarget.val( this.options.valueOnDisable ).change();
 	}
 
-	if (this.options.hasOwnProperty('checkOnDisable')) {
-		this.$valueTarget.prop('checked', this.options.checkOnDisable).change();
+	if( this.options.hasOwnProperty( 'checkOnDisable' ) ) {
+		this.$valueTarget.prop( 'checked', this.options.checkOnDisable ).change();
 	}
 
-	if (this.options.hasOwnProperty('toggleClass') && typeof this.options.toggleClass !== undefined) {
-		this.$subject.removeClass(this.options.toggleClass);
+	if( this.options.hasOwnProperty( 'toggleClass' ) && typeof this.options.toggleClass !== undefined ) {
+		this.$subject.removeClass( this.options.toggleClass );
 	}
 
-	this.options.onDisable.call(dependency, e, this.$subject);
+	this.options.onDisable.call( dependency, e, this.$subject );
 };
 
 /**
@@ -165,27 +167,27 @@ SubjectController.prototype._disable = function(dependency, e) {
  * @param  {[type]}  noFade Whether or not to fade the element
  * @private
  */
-SubjectController.prototype._toggleDisplay = function(show, noFade) {
-	var id = this.$subject.attr('id');
-	var $hideEle;
+SubjectController.prototype._toggleDisplay = function( show, noFade ) {
+	let id = this.$subject.attr( 'id' );
+	let $hideEle;
 
-	if (this.$subject.parent()[0].nodeName.toLowerCase() === 'label') {
+	if( this.$subject.parent()[ 0 ].nodeName.toLowerCase() === 'label' ) {
 		$hideEle = this.$subject.parent();
 	} else {
-		$hideEle = this.$subject.add('label[for="' + id + '"]');
+		$hideEle = this.$subject.add( 'label[for="' + id + '"]' );
 	}
-	
-	if (show) {
-		if (noFade) {
+
+	if( show ) {
+		if( noFade ) {
 			$hideEle.show();
 		} else {
-			$hideEle.fadeIn(this.options.duration);
+			$hideEle.fadeIn( this.options.duration );
 		}
-	} else if (!show) {
-		if (noFade) {
+	} else if( !show ) {
+		if( noFade ) {
 			$hideEle.hide();
 		} else {
-			$hideEle.fadeOut(this.options.duration);
+			$hideEle.fadeOut( this.options.duration );
 		}
 	}
 };

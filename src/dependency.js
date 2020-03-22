@@ -5,13 +5,13 @@
  */
 
 
-var EventEmitter = require('events').EventEmitter;
+let EventEmitter = require( 'events' ).EventEmitter;
 
-var Dependency = function(selector, qualifiers, trigger) {
-	this.$ele = $(selector);
+let Dependency = function( selector, qualifiers, trigger ) {
+	this.$ele       = $( selector );
 	this.qualifiers = qualifiers;
-	this.fieldState = getFieldState(this.$ele);
-	this.methods = [
+	this.fieldState = getFieldState( this.$ele );
+	this.methods    = [
 		'enabled',
 		'checked',
 		'values',
@@ -25,26 +25,26 @@ var Dependency = function(selector, qualifiers, trigger) {
 	// Set initial state of the dependency
 	this.qualified = this.doesQualify();
 
-	this.$ele.on(trigger, handler.bind(this));
-	this.runCheck = handler.bind(this);
+	this.$ele.on( trigger, handler.bind( this ) );
+	this.runCheck = handler.bind( this );
 
-	function handler(e) {
-		var prevState = this.qualified;
+	function handler( e ) {
+		let prevState = this.qualified;
 
-		this.fieldState = getFieldState(this.$ele);
-		this.qualified = this.doesQualify();
+		this.fieldState = getFieldState( this.$ele );
+		this.qualified  = this.doesQualify();
 
-		if (this.qualified !== prevState) {
-			this.emit('change', {
+		if( this.qualified !== prevState ) {
+			this.emit( 'change', {
 				selector: selector,
 				e: e,
 				qualified: this.qualified
-			});
+			} );
 		}
 	}
 };
 
-Dependency.prototype = $.extend({}, EventEmitter.prototype);
+Dependency.prototype = $.extend( {}, EventEmitter.prototype );
 
 /**
  * Qualifier method which checks for the `disabled` attribute.
@@ -57,13 +57,8 @@ Dependency.prototype = $.extend({}, EventEmitter.prototype);
  * @param {Boolean} enabledVal The value we are checking
  * @return {Boolean}
  */
-Dependency.prototype.enabled = function(enabledVal) {
-	if ((!this.fieldState.disabled && enabledVal) ||
-		(this.fieldState.disabled && !enabledVal)) {
-		return true;
-	}
-
-	return false;
+Dependency.prototype.enabled = function( enabledVal ) {
+	return !!( ( !this.fieldState.disabled && enabledVal ) || ( this.fieldState.disabled && !enabledVal ) );
 };
 
 /**
@@ -78,10 +73,10 @@ Dependency.prototype.enabled = function(enabledVal) {
  * @param {Boolean} checkedVal The value we are checking.
  * @return {Boolean}
  */
-Dependency.prototype.checked = function(checkedVal) {
-	if (this.$ele.attr('type') === 'checkbox') {
-		if ((!this.fieldState.checked && checkedVal) ||
-			(this.fieldState.checked && !checkedVal)) {
+Dependency.prototype.checked = function( checkedVal ) {
+	if( this.$ele.attr( 'type' ) === 'checkbox' ) {
+		if( ( !this.fieldState.checked && checkedVal ) ||
+			( this.fieldState.checked && !checkedVal ) ) {
 			return false;
 		}
 	}
@@ -103,14 +98,14 @@ Dependency.prototype.checked = function(checkedVal) {
  * @param  {Array} whitelist The list of acceptable values
  * @return {Boolean}
  */
-Dependency.prototype.values = function(whitelist) {
-	for (var i = 0, len = whitelist.length; i < len; i++) {
-		if (this.fieldState.value !== null && Array.isArray(this.fieldState.value)) {
-			if ($(this.fieldState.value).not(whitelist[i]).length === 0 &&
-				$(whitelist[i]).not(this.fieldState.value).length === 0) {
+Dependency.prototype.values = function( whitelist ) {
+	for( let i = 0, len = whitelist.length; i < len; i++ ) {
+		if( this.fieldState.value !== null && Array.isArray( this.fieldState.value ) ) {
+			if( $( this.fieldState.value ).not( whitelist[ i ] ).length === 0 &&
+				$( whitelist[ i ] ).not( this.fieldState.value ).length === 0 ) {
 				return true;
 			}
-		} else if (whitelist[i] === this.fieldState.value) {
+		} else if( whitelist[ i ] === this.fieldState.value ) {
 			return true;
 		}
 	}
@@ -127,8 +122,8 @@ Dependency.prototype.values = function(whitelist) {
  * @param  {Array} blacklist The list of unacceptable values
  * @return {Boolean}
  */
-Dependency.prototype.not = function(blacklist) {
-	return !this.values(blacklist);
+Dependency.prototype.not = function( blacklist ) {
+	return !this.values( blacklist );
 };
 
 /**
@@ -142,15 +137,17 @@ Dependency.prototype.not = function(blacklist) {
  * @param  {RegExp} regex Regular expression to test against
  * @return {Boolean}
  */
-Dependency.prototype.match = function(regex) {
-	var val = this.fieldState.value;
+Dependency.prototype.match = function( regex ) {
+	let val = this.fieldState.value;
 
-	if (!Array.isArray(this.fieldState.value)) {
-		val = [val];
+	if( !Array.isArray( this.fieldState.value ) ) {
+		val = [ val ];
 	}
 
-	for (var i = 0, len = val.length; i < len; i++) {
-		if (!regex.test(val[i])) return false;
+	for( let i = 0, len = val.length; i < len; i++ ) {
+		if( !regex.test( val[ i ] ) ) {
+			return false;
+		}
 	}
 
 	return true;
@@ -167,15 +164,17 @@ Dependency.prototype.match = function(regex) {
  * @param  {RegExp} regex Regular expression to test against
  * @return {Boolean}
  */
-Dependency.prototype.notMatch = function(regex) {
-	var val = this.fieldState.value;
+Dependency.prototype.notMatch = function( regex ) {
+	let val = this.fieldState.value;
 
-	if (!Array.isArray(this.fieldState.value)) {
-		val = [val];
+	if( !Array.isArray( this.fieldState.value ) ) {
+		val = [ val ];
 	}
 
-	for (var i = 0, len = val.length; i < len; i++) {
-		if (regex.test(val[i])) return false;
+	for( let i = 0, len = val.length; i < len; i++ ) {
+		if( regex.test( val[ i ] ) ) {
+			return false;
+		}
 	}
 
 	return true;
@@ -192,13 +191,13 @@ Dependency.prototype.notMatch = function(regex) {
  * @param  {Array} whitelist List of acceptable values
  * @return {Boolean}
  */
-Dependency.prototype.contains = function(whitelist) {
-	if (!Array.isArray(this.fieldState.value)) {
-		return this.values(whitelist);
+Dependency.prototype.contains = function( whitelist ) {
+	if( !Array.isArray( this.fieldState.value ) ) {
+		return this.values( whitelist );
 	}
 
-	for (var i = 0, len = whitelist.length; i < len; i++) {
-		if ($.inArray(whitelist[i], this.fieldState.value) !== -1) {
+	for( let i = 0, len = whitelist.length; i < len; i++ ) {
+		if( $.inArray( whitelist[ i ], this.fieldState.value ) !== -1 ) {
 			return true;
 		}
 	}
@@ -216,10 +215,9 @@ Dependency.prototype.contains = function(whitelist) {
  * @param  {Boolean} shouldMatch Should the value be valid
  * @return {Boolean}
  */
-Dependency.prototype.email = function(shouldMatch) {
-	var regex = /^[_a-zA-Z0-9\-\+]+(\.[_a-zA-Z0-9\-\+]+)*@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$/;
-
-	return this.match(regex) === shouldMatch;
+Dependency.prototype.email = function( shouldMatch ) {
+	let regex = /^[_a-zA-Z0-9\-\+]+(\.[_a-zA-Z0-9\-\+]+)*@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$/;
+	return this.match( regex ) === shouldMatch;
 };
 
 /**
@@ -231,10 +229,9 @@ Dependency.prototype.email = function(shouldMatch) {
  * @param  {Boolean} shouldMatch Should the value be valid
  * @return {Boolean}
  */
-Dependency.prototype.url = function(shouldMatch) {
-	var regex = /(((http|ftp|https):\/\/)|www\.)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&:\/~\+#!]*[\w\-\@?\^=%&\/~\+#])?/;
-
-	return this.match(regex) === shouldMatch;
+Dependency.prototype.url = function( shouldMatch ) {
+	let regex = /(((http|ftp|https):\/\/)|www\.)[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?\^=%&:\/~\+#!]*[\w\-\@?\^=%&\/~\+#])?/;
+	return this.match( regex ) === shouldMatch;
 };
 
 /**
@@ -250,22 +247,23 @@ Dependency.prototype.url = function(shouldMatch) {
  * @param  {Number}           [step] The number of steps
  * @return {Boolean}
  */
-Dependency.prototype.range = function(start, end, step) {
-	var type = typeof start === 'string' ? 'char' : 'number';
-	var startVal = type === 'char' ? start.charCodeAt() : start;
-	var endVal = type === 'char' ? end.charCodeAt() : end;
-	var val = type === 'char' ? this.fieldState.value.charCodeAt() : parseFloat(this.fieldState.value);
+Dependency.prototype.range = function( start, end, step ) {
+	let type     = typeof start === 'string' ? 'char' : 'number';
+	let startVal = type === 'char' ? start.charCodeAt() : start;
+	let endVal   = type === 'char' ? end.charCodeAt() : end;
+	let val      = type === 'char' ? this.fieldState.value.charCodeAt() : parseFloat( this.fieldState.value );
 
-	if (step) {
-		var valArray = [];
-		for (var i = startVal; i <= endVal; i += step) valArray.push(i);
-		return valArray.indexOf(val) >= 0;
+	if( step ) {
+		let valArray = [];
+		for( let i = startVal; i <= endVal; i += step ) {
+			valArray.push( i );
+		}
+		return valArray.indexOf( val ) >= 0;
 	} else {
-		if (val >= startVal && val <= endVal) {
+		if( val >= startVal && val <= endVal ) {
 			return true;
 		}
 	}
-
 	return false;
 };
 
@@ -277,21 +275,23 @@ Dependency.prototype.range = function(start, end, step) {
  * @return {Boolean}
  */
 Dependency.prototype.doesQualify = function() {
-	for (var q in this.qualifiers) {
-		if (!this.qualifiers.hasOwnProperty(q)) continue;
+	for( let q in this.qualifiers ) {
+		if( !this.qualifiers.hasOwnProperty( q ) ) {
+			continue;
+		}
 
-		if (this.methods.indexOf(q) && typeof this[q] === 'function') {
-			if (q === 'range') {
-				if (!this[q].apply(this, this.qualifiers[q])) {
+		if( this.methods.indexOf( q ) && typeof this[ q ] === 'function' ) {
+			if( q === 'range' ) {
+				if( !this[ q ].apply( this, this.qualifiers[ q ] ) ) {
 					return false;
 				}
 			} else {
-				if (!this[q].call(this, this.qualifiers[q])) {
+				if( !this[ q ].call( this, this.qualifiers[ q ] ) ) {
 					return false;
 				}
 			}
-		} else if (typeof this.qualifiers[q] === 'function') {
-			if (!this.qualifiers[q].call(this.qualifiers, this.$ele.val())) {
+		} else if( typeof this.qualifiers[ q ] === 'function' ) {
+			if( !this.qualifiers[ q ].call( this.qualifiers, this.$ele.val() ) ) {
 				return false;
 			}
 		}
@@ -308,30 +308,30 @@ module.exports = Dependency;
  * @return {Object}
  * @private
  */
-function getFieldState($ele) {
-	var val = $ele.val();
+function getFieldState( $ele ) {
+	let val = $ele.val();
 
 	// If dependency is a radio group, then filter by `:checked`
-	if ($ele.attr('type') === 'radio') {
-		val = $ele.filter(':checked').val();
+	if( $ele.attr( 'type' ) === 'radio' ) {
+		val = $ele.filter( ':checked' ).val();
 	}
 
 	return {
 		value: val,
-		checked: $ele.is(':checked'),
-		disabled: $ele.is(':disabled'),
-		selected: $ele.is(':selected')
+		checked: $ele.is( ':checked' ),
+		disabled: $ele.is( ':disabled' ),
+		selected: $ele.is( ':selected' )
 	};
 }
 
 // Array.isArray polyfill
-if (!Array.isArray) {
-	Array.isArray = function(arg) {
-		return Object.prototype.toString.call(arg) === '[object Array]';
+if( !Array.isArray ) {
+	Array.isArray = function( arg ) {
+		return Object.prototype.toString.call( arg ) === '[object Array]';
 	};
 }
 
 // Number.isNaN polyfill
-Number.isNaN = Number.isNaN || function(value) {
+Number.isNaN = Number.isNaN || function( value ) {
 	return value !== value;
 };
