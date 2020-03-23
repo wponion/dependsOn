@@ -452,7 +452,7 @@ Dependency.prototype.doesQualify = function() {
 		}
 
 		let $callback = this.method_alias( q );
-		console.log( $callback );
+
 		if( this.methods.indexOf( $callback ) && typeof this[ $callback ] === 'function' ) {
 			if( $callback === 'range' ) {
 				if( !this[ $callback ].apply( this, this.qualifiers[ q ] ) ) {
