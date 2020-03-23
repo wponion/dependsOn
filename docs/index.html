@@ -5,7 +5,7 @@
 		<script type="text/javascript" src="assets/js/bootstrap-scrollspy.js"></script>
 		<script type="text/javascript" src="assets/js/google-code-prettify/prettify.js"></script>
 
-		<script type="text/javascript" src="../dist/dependsOn.min.js"></script>
+		<script type="text/javascript" src="../dist/wponion-dependsOn.js"></script>
 
 		<link href="assets/css/style.css" rel="stylesheet">
 		<link href="assets/css/prettify.css" rel="stylesheet">
@@ -82,7 +82,7 @@
 					<h3>Activate plugin</h3>
 					<p>Use jQuery selectors to active the plugin.</p>
 					<pre class="prettyprint linenum">
-$('#myText').dependsOn({
+$('#myText').WPOnion_dependsOn({
 	// The selector for the depenency
 	'#myCheck': {
 		// The dependency qualifiers
@@ -307,7 +307,7 @@ $('#myText').dependsOn({
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#basicTest .subject').dependsOn({
+$('#basicTest .subject').WPOnion_dependsOn({
 	'#basicTest input[type="checkbox"]': {
 		checked: true
 	}
@@ -341,7 +341,7 @@ $('#basicTest .subject').dependsOn({
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#valuesTest .subject').dependsOn({
+$('#valuesTest .subject').WPOnion_dependsOn({
 	'#valuesTest input[type="text"]': {
 		values: ['yes', 'true']
 	}
@@ -375,7 +375,7 @@ $('#valuesTest .subject').dependsOn({
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#numberRangeTest .subject').dependsOn({
+$('#numberRangeTest .subject').WPOnion_dependsOn({
 	'#numberRangeTest input[type="text"]': {
 		range: [2, 10, 2]
 	}
@@ -409,7 +409,7 @@ $('#numberRangeTest .subject').dependsOn({
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#alphaRangeTest .subject').dependsOn({
+$('#alphaRangeTest .subject').WPOnion_dependsOn({
 	'#alphaRangeTest input[type="text"]': {
 		range: ['a', 'c']
 	}
@@ -452,7 +452,7 @@ $('#alphaRangeTest .subject').dependsOn({
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#emailTest .subject').dependsOn({
+$('#emailTest .subject').WPOnion_dependsOn({
 	'#emailTest input[type="checkbox"]': {
 		checked: true
 	},
@@ -496,7 +496,7 @@ $('#emailTest .subject').dependsOn({
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#affectValueTest .subject').dependsOn({
+$('#affectValueTest .subject').WPOnion_dependsOn({
 	'#affectValueTest select': {
 		values: ['yes']
 	}
@@ -545,7 +545,7 @@ $('#affectValueTest .subject').dependsOn({
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#multipleValuesTest .subject').dependsOn({
+$('#multipleValuesTest .subject').WPOnion_dependsOn({
 	'#multipleValuesTest select': {
 		values: [['dog', 'cat']]
 	}
@@ -620,7 +620,7 @@ $('#multipleValuesTest .subject').dependsOn({
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#orTest .subject').dependsOn({
+$('#orTest .subject').WPOnion_dependsOn({
 	'#orTest input[name="xtraCheese"]': {
 		checked: true
 	}
@@ -672,7 +672,7 @@ $('#orTest .subject').dependsOn({
 						<pre class="prettyprint linenums">
 var isClicked = false;
 
-var customQualifierTest = $('#customQualifierTest .subject').dependsOn({
+var customQualifierTest = $('#customQualifierTest .subject').WPOnion_dependsOn({
 	'#customQualifierTest input[type="checkbox"]': {
 		checked: true,
 		// Custom qualifier returns the value of the global variable `isClicked`.
@@ -728,7 +728,7 @@ $('#customQualifierTest .clickMe').toggle(function() {
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#callbackTest .subject').dependsOn({
+$('#callbackTest .subject').WPOnion_dependsOn({
 	'#callbackTest input[type="checkbox"]': {
 		checked: true
 	}
@@ -788,7 +788,7 @@ $('#callbackTest .subject').dependsOn({
 					<div class="showHideCode">
 						<p><b><a href="">Hide Javascript</a></b></p>
 						<pre class="prettyprint linenums">
-$('#valueTargetTest .subject').dependsOn({
+$('#valueTargetTest .subject').WPOnion_dependsOn({
 	'#valueTargetTest select': {
 		values: ['married', 'widowed']
 	}
@@ -825,31 +825,31 @@ $('#valueTargetTest .subject').dependsOn({
 				return false;
 			});
 
-			$('#checkedTest .subject').dependsOn({
+			$('#checkedTest .subject').WPOnion_dependsOn({
 				'#checkedTest input[type="checkbox"]': {
 					checked: true
 				}
 			});
 
-			$('#valuesTest .subject').dependsOn({
+			$('#valuesTest .subject').WPOnion_dependsOn({
 				'#valuesTest input[type="text"]': {
 					values: ['yes', 'true']
 				}
 			});
 
-			$('#numberRangeTest .subject').dependsOn({
+			$('#numberRangeTest .subject').WPOnion_dependsOn({
 				'#numberRangeTest input[type="text"]': {
 					range: [2, 10, 2]
 				}
 			});
 
-			$('#alphaRangeTest .subject').dependsOn({
+			$('#alphaRangeTest .subject').WPOnion_dependsOn({
 				'#alphaRangeTest input[type="text"]': {
 					range: ['a', 'c']
 				}
 			});
 
-			$('#emailTest .subject').dependsOn({
+			$('#emailTest .subject').WPOnion_dependsOn({
 				'#emailTest input[type="checkbox"]': {
 					checked: true
 				},
@@ -858,7 +858,7 @@ $('#valueTargetTest .subject').dependsOn({
 				}
 			});
 
-			$('#affectValueTest .subject').dependsOn({
+			$('#affectValueTest .subject').WPOnion_dependsOn({
 				'#affectValueTest select': {
 					values: ['yes']
 				}
@@ -868,7 +868,7 @@ $('#valueTargetTest .subject').dependsOn({
 				hide: false
 			});
 
-			$('#multipleValuesTest .subject').dependsOn({
+			$('#multipleValuesTest .subject').WPOnion_dependsOn({
 				'#multipleValuesTest select': {
 					values: [['dog', 'cat']]
 				}
@@ -878,7 +878,7 @@ $('#valueTargetTest .subject').dependsOn({
 				hide: false
 			});
 
-			$('#orTest .subject').dependsOn({
+			$('#orTest .subject').WPOnion_dependsOn({
 				'#orTest input[name="xtraCheese"]': {
 					checked: true
 				}
@@ -892,7 +892,7 @@ $('#valueTargetTest .subject').dependsOn({
 
 			var isClicked = false;
 
-			var customQualifierTest = $('#customQualifierTest .subject').dependsOn({
+			var customQualifierTest = $('#customQualifierTest .subject').WPOnion_dependsOn({
 				'#customQualifierTest input[type="checkbox"]': {
 					checked: true,
 					// Custom qualifier returns the value of the global variable `isClicked`.
@@ -916,7 +916,7 @@ $('#valueTargetTest .subject').dependsOn({
 				return false;
 			});
 
-			$('#callbackTest .subject').dependsOn({
+			$('#callbackTest .subject').WPOnion_dependsOn({
 				'#callbackTest input[type="checkbox"]': {
 					checked: true
 				}
@@ -926,7 +926,7 @@ $('#valueTargetTest .subject').dependsOn({
 				}
 			});
 
-			$('#valueTargetTest .subject').dependsOn({
+			$('#valueTargetTest .subject').WPOnion_dependsOn({
 				'#valueTargetTest select': {
 					values: ['married', 'widowed']
 				}
