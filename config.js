@@ -5,6 +5,7 @@ module.exports = {
 			dist: './dist/',
 			webpack: 'webpack_prod',
 			rename: 'wponion-dependsOn.js',
+			watch: './src/*.js'
 		},
 	},
 	config: {
