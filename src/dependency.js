@@ -47,6 +47,77 @@ let Dependency = function( selector, qualifiers, trigger ) {
 Dependency.prototype = $.extend( {}, EventEmitter.prototype );
 
 /**
+ * Checks & Returns Proper Method Alias.
+ * @param method
+ * @return {boolean}
+ */
+Dependency.prototype.method_alias = function( method ) {
+	switch( method ) {
+		case '\'\'':
+		case '""':
+		case 'empty':
+		case 'EMPTY':
+			method = 'empty';
+			break;
+
+		case '!""':
+		case '!\'\'':
+		case '!empty':
+		case '!EMPTY':
+		case 'not_empty':
+			method = 'not_empty';
+			break;
+
+		case '=':
+		case '==':
+		case '===':
+		case 'equals':
+		case 'OR':
+		case 'or':
+		case '||':
+			method = 'values';
+			break;
+
+		case '!=':
+		case '!==':
+		case '!===':
+		case '!equals':
+		case 'not_equals':
+			method = 'not_equals';
+			break;
+
+		case 'has':
+		case 'HAS':
+		case 'in':
+		case 'IN':
+			method = 'contains';
+			break;
+
+		case '>':
+		case 'gt':
+			method = 'greater_than';
+			break;
+
+		case '>=':
+		case 'gte':
+			method = 'greater_than_or_equal';
+			break;
+
+		case 'lt':
+		case '<':
+			method = 'lesser_than';
+			break;
+
+		case 'lte':
+		case '<=':
+			method = 'lesser_than_or_equal';
+			break;
+	}
+
+	return method;
+};
+
+/**
  * Qualifier method which checks for the `disabled` attribute.
  * ---
  * Returns false when dependency is disabled and `enabled`
@@ -99,6 +170,10 @@ Dependency.prototype.checked = function( checkedVal ) {
  * @return {Boolean}
  */
 Dependency.prototype.values = function( whitelist ) {
+	if( typeof whitelist === 'string' && typeof this.fieldState.value === 'string' && this.fieldState.value === whitelist ) {
+		return true;
+	}
+
 	for( let i = 0, len = whitelist.length; i < len; i++ ) {
 		if( this.fieldState.value !== null && Array.isArray( this.fieldState.value ) ) {
 			if( $( this.fieldState.value ).not( whitelist[ i ] ).length === 0 &&
@@ -192,17 +267,113 @@ Dependency.prototype.notMatch = function( regex ) {
  * @return {Boolean}
  */
 Dependency.prototype.contains = function( whitelist ) {
+	if( typeof whitelist === 'string' && typeof this.fieldState.value === 'string' && this.fieldState.value.indexOf( whitelist ) >= 0 ) {
+		return true;
+	}
+
+	if( typeof whitelist === 'object' ) {
+		for( let i = 0, len = whitelist.length; i < len; i++ ) {
+			if( typeof this.fieldState.value === 'string' ) {
+				return ( this.fieldState.value.indexOf( whitelist[ i ] ) >= 0 );
+			} else if( $.inArray( whitelist[ i ], this.fieldState.value ) !== -1 ) {
+				return true;
+			}
+		}
+	}
+
 	if( !Array.isArray( this.fieldState.value ) ) {
 		return this.values( whitelist );
 	}
 
-	for( let i = 0, len = whitelist.length; i < len; i++ ) {
-		if( $.inArray( whitelist[ i ], this.fieldState.value ) !== -1 ) {
-			return true;
+	return false;
+};
+
+/**
+ * Qualifier method which checks the dependency input value against an
+ * array of whitelisted values with any condition.
+ *
+ * @param  {Array} whitelist The list of acceptable values
+ * @return {Boolean}
+ */
+Dependency.prototype.any = function( whitelist ) {
+	whitelist  = ( typeof whitelist === 'string' ) ? whitelist.split( ',' ) : whitelist;
+	let values = ( typeof this.fieldState.value === 'string' ) ? this.fieldState.value.split( ' ' ) : this.fieldState.value;
+
+	for( let i in values ) {
+		if( values.hasOwnProperty( i ) ) {
+			if( $.inArray( values[ i ], whitelist ) > -1 ) {
+				return true;
+			}
 		}
 	}
-
 	return false;
+};
+
+/**
+ * Qualifier method which checks the dependency input value against an
+ * array of whitelisted values with any condition. and returns false if value exists.
+ *
+ * @param  {Array} whitelist The list of acceptable values
+ * @return {Boolean}
+ */
+Dependency.prototype.not_any = function( whitelist ) {
+	return ( true !== this.any( whitelist ) );
+};
+
+/**
+ * Qualifier method which checks given value is empty.
+ * @return {boolean}
+ */
+Dependency.prototype.not_equals = function( whitelist ) {
+	return ( whitelist !== this.fieldState.value );
+};
+
+/**
+ * Qualifier method which checks given value is greater_than.
+ * @return {boolean}
+ */
+Dependency.prototype.greater_than = function( whitelist ) {
+	return ( Number( whitelist ) > Number( this.fieldState.value ) );
+};
+
+/**
+ * Qualifier method which checks given value is empty.
+ * @return {boolean}
+ */
+Dependency.prototype.greater_than_or_equal = function( whitelist ) {
+	return ( Number( whitelist ) >= Number( this.fieldState.value ) );
+};
+
+/**
+ * Qualifier method which checks given value is empty.
+ * @return {boolean}
+ */
+Dependency.prototype.lesser_than = function( whitelist ) {
+	return ( Number( this.fieldState.value ) < Number( whitelist ) );
+};
+
+/**
+ * Qualifier method which checks given value is empty.
+ * @return {boolean}
+ */
+Dependency.prototype.lesser_than_or_equal = function( whitelist ) {
+	return ( Number( this.fieldState.value ) <= Number( whitelist ) );
+};
+
+/**
+ * Qualifier method which checks given value is empty.
+ * @return {boolean}
+ */
+Dependency.prototype.empty = function() {
+	return ( '' === this.fieldState.value );
+};
+
+/**
+ * Qualifier method which checks given value is not empty.
+ * @return {boolean}
+ */
+Dependency.prototype.not_empty = function() {
+	return ( '' !== this.fieldState.value );
 };
 
 /**
@@ -280,13 +451,15 @@ Dependency.prototype.doesQualify = function() {
 			continue;
 		}
 
-		if( this.methods.indexOf( q ) && typeof this[ q ] === 'function' ) {
-			if( q === 'range' ) {
-				if( !this[ q ].apply( this, this.qualifiers[ q ] ) ) {
+		let $callback = this.method_alias( q );
+		console.log( $callback );
+		if( this.methods.indexOf( $callback ) && typeof this[ $callback ] === 'function' ) {
+			if( $callback === 'range' ) {
+				if( !this[ $callback ].apply( this, this.qualifiers[ q ] ) ) {
 					return false;
 				}
 			} else {
-				if( !this[ q ].call( this, this.qualifiers[ q ] ) ) {
+				if( !this[ $callback ].call( this, this.qualifiers[ q ] ) ) {
 					return false;
 				}
 			}
@@ -296,7 +469,6 @@ Dependency.prototype.doesQualify = function() {
 			}
 		}
 	}
-
 	return true;
 };
 
